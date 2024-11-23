@@ -169,3 +169,46 @@ if __name__ == "__main__":
     # 推理生成
     generated_imgs = diffusion.generate(batch_size=16)
     save_image(generated_imgs, "generated_images.png")
+
+
+class UNet(nn.Module):
+    def __init__(self, in_channels, out_channels, base_channels=64):
+        super(UNet, self).__init__()
+
+        self.enc1 = self.conv_block(in_channels, base_channels)  # 3 -> 64
+        self.enc2 = self.conv_block(base_channels, base_channels * 2)  # 64 -> 128
+        self.enc3 = self.conv_block(base_channels * 2, base_channels * 4)  # 128 -> 256
+
+        self.bottleneck = self.conv_block(base_channels * 4, base_channels * 8)  # 256 -> 512
+
+        self.dec3 = self.conv_block(base_channels * 4, base_channels * 2)
+        self.dec2 = self.conv_block(base_channels * 2, base_channels * 1)
+        self.dec1 = self.conv_block(base_channels, in_channels)
+
+        self.pool = nn.MaxPool2d(2)
+        self.upsample3 = nn.ConvTranspose2d(base_channels * 8, base_channels * 4, kernel_size=2, stride=2)
+        self.upsample2 = nn.ConvTranspose2d(base_channels * 4, base_channels * 2, kernel_size=2, stride=2)
+        self.upsample1 = nn.ConvTranspose2d(base_channels * 2, base_channels, kernel_size=2, stride=2)
+
+    def conv_block(self, in_channels, out_channels):
+        return nn.Sequential(
+            nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+            nn.Conv2d(out_channels, out_channels, kernel_size=3, padding=1),
+            nn.ReLU(inplace=True),
+        )
+
+    def forward(self, x, t):
+        enc1 = self.enc1(x)  # 64
+        enc2 = self.enc2(self.pool(enc1))  # 128
+        enc3 = self.enc3(self.pool(enc2))  # 258
+
+        bottleneck = self.bottleneck(self.pool(enc3))  # 512
+
+        dec3 = self.upsample3(bottleneck) + enc3  # 256
+        dec3 = self.dec3(dec3)
+        dec2 = self.upsample2(dec3) + enc2
+        dec2 = self.dec2(dec2)
+        dec1 = self.upsample1(dec2) + enc1
+        dec1 = self.dec1(dec1)
+        return dec1
