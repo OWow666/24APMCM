@@ -148,16 +148,16 @@ def train_model(model, diffusion, dataloader, optimizer, epochs, device):
             optimizer.step()
             
         print(f"Epoch {epoch + 1}/{epochs}, Loss: {loss.item():.4f}")
+if __name__ == "__main__":
+    img_size = (256,256)
+    timesteps = 1000
 
-img_size = (256,256)
-timesteps = 1000
+    model = UNet(in_channels=3, out_channels=3, base_channels=64).to(device)
+    diffusion = DiffusionModel(model, img_size, timesteps, device)
 
-model = UNet(in_channels=3, out_channels=3, base_channels=64).to(device)
-diffusion = DiffusionModel(model, img_size, timesteps, device)
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
+    print("Start Training!")
+    train_model(model, diffusion, train_loader, optimizer,epochs=10, device=device)
 
-optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
-print("Start Training!")
-train_model(model, diffusion, train_loader, optimizer,epochs=10, device=device)
-
-torch.save(model.state_dict(), './diffusion_model.pth')
-print("Done! Model has been saved!")
+    torch.save(model.state_dict(), './diffusion_model.pth')
+    print("Done! Model has been saved!")
