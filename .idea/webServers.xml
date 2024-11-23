@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="0c9cd54d-42b5-4111-b7c3-27c2b8d95d2b" name="APMCM Server">
+        <fileTransfer accessType="SFTP" host="region-42.seetacloud.com" port="48558" sshConfigId="2ac458e2-d45d-4ba6-8e7b-0453032128e7" sshConfig="root@region-42.seetacloud.com:48558 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
