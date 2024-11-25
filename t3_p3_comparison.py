@@ -132,7 +132,7 @@ def visualize_comparison(input_folder):
     plt.tight_layout()
     plt.show()
 
-input_folder = "D:\shumo\\2024 APMCM\Attachment\Classify\color_cast" 
+input_folder = os.path.join(os.getcwd(), 'Attachment', 'Classify', 'color_cast')
 
 for i in range(10):
     visualize_comparison(input_folder)

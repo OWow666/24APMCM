@@ -56,7 +56,7 @@ def process_folder(input_folder, output_folder):
             cv2.imwrite(output_path, enhanced_image)
             print(f"Dealed and solved:{output_path}")
 
-input_folder = "D:\shumo\\2024 APMCM\Attachment\Classify\color_cast" 
-output_folder = "D:\shumo\\2024 APMCM\Attachment\Powered\color_cast"  
+input_folder = os.path.join(os.getcwd(), 'Attachment', 'Classify', 'color_cast')
+output_folder = os.path.join(os.getcwd(), 'Attachment', 'Powered', 'color_cast')
 
 process_folder(input_folder, output_folder)

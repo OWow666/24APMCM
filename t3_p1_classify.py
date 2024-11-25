@@ -32,8 +32,8 @@ def classify_images(path_a, path_b, path_c):
             #plt.show()
             #break
 
-path_a = 'D:\shumo\\2024 APMCM\Attachment\Attachment1'
-path_b = r'D:\shumo\2024 APMCM\code\Answer_updated.xlsx'
-path_c = r'D:\shumo\2024 APMCM\Attachment\Classify'
+path_a = os.path.join(os.getcwd(), 'Attachment', 'Attachment1')
+path_b = os.path.join(os.getcwd(), 'Answer_updated.xlsx')
+path_c = os.path.join(os.getcwd(), 'Attachment', 'Classify')
 
 classify_images(path_a, path_b, path_c)
